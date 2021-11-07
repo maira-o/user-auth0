@@ -19,7 +19,7 @@ exports.novoEducador = async (req, res) => {
                 break;
             case 200: // 200 OK
                 const dataResult = await educadorService.novoEducador(result.usuario)
-                switch (result.status) {
+                switch (dataResult.status) {
                     case 400: // 400 Bad Request
                     case 406: // 406 Not Acceptable
                         res.status(dataResult.data.status).send({ status: dataResult.data.status, message: dataResult.data.message });
