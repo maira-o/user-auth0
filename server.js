@@ -14,7 +14,7 @@ app.use(cors())
 app.use(morgan('dev'));
 
 //Importing routes
-//const usuarioRoute = require('./routes/usuario');
+const usuarioRoute  = require('./routes/usuario');
 const educadorRoute = require('./routes/educador');
 //const criancaRoute = require('./routes/crianca');
 
@@ -26,7 +26,7 @@ mongoose.connect(
 });
 
 //Make routes available
-//app.use('/',  usuarioRoute);
+app.use('/',          usuarioRoute);
 app.use('/educador',  educadorRoute);
 //app.use('/crianca',  criancaRoute);
 
