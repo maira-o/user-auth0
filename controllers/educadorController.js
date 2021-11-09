@@ -36,7 +36,7 @@ exports.novoEducador = async (req, res) => {
                 }    
                 break;
             default:
-                console.log("novoEducador > default > result >>>")
+                console.log("novoEducador > 200 > default > result >>>")
                 console.log(result)
                 // 500 Internal Server Error
                 res.status(500).send({ status: 500, message: "Erro ao cadastrar Educador" });

@@ -1,7 +1,7 @@
 const mongoose          = require('mongoose');
 const mongooseHidden    = require('mongoose-hidden')({
                                                         // OVERRIDING default TO RETURN _id
-                                                        defaultHidden: { senha: true, createAt: true, }
+                                                        defaultHidden: { senha: true }
                                                     });
 
 const usuarioSchema = new mongoose.Schema({
