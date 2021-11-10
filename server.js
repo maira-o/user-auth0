@@ -15,7 +15,7 @@ app.use(morgan('dev'));
 
 //Importing routes
 const usuarioRoute  = require('./routes/usuario');
-const educadorRoute = require('./routes/educador');
+//const educadorRoute = require('./routes/educador');
 //const criancaRoute = require('./routes/crianca');
 
 mongoose.connect(
@@ -27,7 +27,7 @@ mongoose.connect(
 
 //Make routes available
 app.use('/',          usuarioRoute);
-app.use('/educador',  educadorRoute);
+//app.use('/educador',  educadorRoute);
 //app.use('/crianca',  criancaRoute);
 
 const port = process.env.PORT;

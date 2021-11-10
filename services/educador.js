@@ -8,12 +8,12 @@ exports.novoEducador = async (data) => {
     }
 }
 
-exports.buscaEducador = async (id) => {
+exports.buscaReduzidaEducador = async (id) => {
     try {
-        return await axios.get(`${process.env.APP_EDUCADOR_URL}/${id}`, {
+        return await axios.get(`${process.env.APP_EDUCADOR_URL}/buscaReduzidaEducador/${id}`, {
             headers: { /* token: localStorage.getItem('token') */ }
         });
     } catch (err) {
         return (err.response)
     }
-} 
+}
