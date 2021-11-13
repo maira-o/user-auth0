@@ -94,12 +94,12 @@ exports.novoUsuario = async (req, res) => {
             papel:          papel
         }
 
-        const {erroUsuario} = await validaUsuario(usuarioReq);
-        if(erroUsuario){
-            console.log("novoUsuario > erroUsuario >>>")
-            console.log(erroUsuario.details[0].message)
-            // 400 Bad Request
-            return res.status(400).send({ status: 400, message: 'O objeto enviado é inválido (dados do usuário)' });
+        let { error } = await validaUsuario(usuarioReq);
+        if(error){
+            console.log("novoUsuario > validaUsuario > error >>>")
+            console.log(error.details[0].message)
+            // 406 Not Acceptable
+            return res.status(406).send({ status: 406, message: 'O objeto enviado é inválido (dados do usuário)' });
         }
 
         let criancaReq = {}
@@ -116,16 +116,12 @@ exports.novoUsuario = async (req, res) => {
                 nivel_leitura:  nivel_leitura,
                 educadorUsrId:  userId    // id do usuário logado (req.user._id)
             }
-            console.log('criancaReq >>> ')
-            console.log(criancaReq)
-            const {erroCrianca} = await validaCrianca(criancaReq);
-            console.log('erroCrianca >>> ')
-            console.log(erroCrianca)
-            if(erroCrianca){
-                console.log("novoUsuario > erroCrianca >>>")
-                console.log(erroCrianca.details[0].message)
-                // 400 Bad Request
-                return res.status(400).send({ status: 400, message: 'O objeto enviado é inválido (dados da criança)' });
+            let { error } = await validaCrianca(criancaReq);
+            if(error){
+                console.log("novoUsuario > validaCrianca > error >>>")
+                console.log(error.details[0].message)
+                // 406 Not Acceptable
+                return res.status(406).send({ status: 406, message: 'O objeto enviado é inválido (dados da criança)' });
             }
         }
 
@@ -179,7 +175,7 @@ exports.novoUsuario = async (req, res) => {
                 break;
             case 3:
                 console.log("novoUsuario > novoApoiador >>>")
-                result = { status: 200 }
+                result = { status: 500 }
                 break;
             default: // 406 Not Acceptable
                 await apagaUsuario(usuario)
@@ -204,14 +200,14 @@ exports.novoUsuario = async (req, res) => {
         console.log("novoUsuario > err >>> ")
         console.log(err)
         // 500 Internal Server Error
-        res.status(500).send({ status: 500, message: "Erro ao criar uauário" });
+        res.status(500).send({ status: 500, message: "Erro ao criar usuário" });
     }
 }
 
 const apagaUsuario = async (usuario) => {
     try {
-        await usuario.deleteOne()
         // 200 OK
+        await usuario.deleteOne()
         return { status: 200, message: 'Usuário apagado' }
     } catch (err){
         console.log("apagaUsuario > err >>> ")
