@@ -23,7 +23,6 @@ exports.buscaUsuario = async (req, res) => {
         // 200 OK
         switch (usuario.papel) {
             case 1:
-                console.log("buscaUsuario > buscaReduzidaEducador >>>")
                 result = await educadorService.buscaReduzidaEducador(usuario._id)
                 if (result.status === 200) {
                     let copia = JSON.parse(JSON.stringify(usuario));
@@ -32,12 +31,16 @@ exports.buscaUsuario = async (req, res) => {
                 }
                 break;
             case 2:
-                console.log("buscaUsuario > buscaReduzidaCriança >>>")
-                result = { status: 200 }
+                result = await criancaService.buscaReduzidaCrianca(usuario._id)
+                if (result.status === 200) {
+                    let copia = JSON.parse(JSON.stringify(usuario));
+                    copia.crianca = result.data.crianca
+                    usuario = copia
+                }
                 break;
             case 3:
                 console.log("buscaUsuario > buscaReduzidaApoiador >>>")
-                result = { status: 200 }
+                result = { status: 200, message: 'Sucesso' }
                 break;
             default: // 406 Not Acceptable
                 return res.status(406).send({ status: 406, message: "Usuário não classificado" });
@@ -234,13 +237,11 @@ const validaCrianca = (crianca) => {
         ano_escolar:    Joi.number().required(),
         cidade:         Joi.string().required(),
         uf:             Joi.string().length(2).required(),
-        telefone:       Joi.string().length(13).required(),
+        telefone:       Joi.string().min(12).max(15).required(),
         observacoes:    Joi.string(),
         nivel_leitura:  Joi.number().integer().min(1).max(5).required(),
         educadorUsrId:  Joi.string().required()
     });
-    console.log('crianca >>> ')
-    console.log(crianca)
     return schema.validate(crianca);
 }
 
