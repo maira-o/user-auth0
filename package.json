@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/maira-o/user-ife.git"
   },
-  "author": "",
+  "author": "Gabriel Senna da Rosa",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/maira-o/user-ife/issues"
@@ -28,7 +28,9 @@
     "joi": "^17.4.2",
     "mongoose": "^6.0.12",
     "mongoose-hidden": "^1.9.1",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.14"
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
