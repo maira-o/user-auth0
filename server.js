@@ -26,9 +26,7 @@ mongoose.connect(
 });
 
 //Make routes available
-app.use('/',          usuarioRoute);
-//app.use('/educador',  educadorRoute);
-//app.use('/crianca',  criancaRoute);
+app.use('/usuario',          usuarioRoute);
 
 const port = process.env.PORT;
 

@@ -197,7 +197,7 @@ exports.novoUsuario = async (req, res) => {
                 console.log(result)
                 await apagaUsuario(usuario)
                 // 500 Internal Server Error
-                res.status(500).send({ status: 500, message: "Erro ao criar uauário" });
+                res.status(500).send({ status: 500, message: "Erro ao criar usuário" });
         }
     } catch (err){
         console.log("novoUsuario > err >>> ")
