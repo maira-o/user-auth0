@@ -8,12 +8,21 @@ exports.novaCrianca = async (data) => {
     }
 }
 
-exports.buscaReduzidaCrianca = async (id) => {
+/* const authAxios = axios.create({
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+}); */
+
+exports.buscaReduzidaCrianca = async (req, id) => {
     try {
         return await axios.get(`${process.env.APP_CRIANCA_URL}/crianca/buscaReduzidaCrianca/${id}`, {
-            headers: { /* token: localStorage.getItem('token') */ }
+            headers: { token: req.headers.token /* localStorage.getItem('token') */ }
         });
     } catch (err) {
-        return (err.response)
+        console.log("serviceCrianca > buscaReduzidaCrianca > err >>>")
+        console.log(err)
+        // 500 Internal Server Error
+        return res.status(500).send({ status: 500, message: "Erro ao buscar buscaReduzidaCrianca" });
     }
 }

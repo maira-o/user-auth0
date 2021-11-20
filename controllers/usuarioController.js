@@ -31,7 +31,8 @@ exports.buscaUsuario = async (req, res) => {
                 }
                 break;
             case 2:
-                result = await criancaService.buscaReduzidaCrianca(usuario._id)
+                /* console.log(req) */
+                result = await criancaService.buscaReduzidaCrianca(req, usuario._id)
                 if (result.status === 200) {
                     let copia = JSON.parse(JSON.stringify(usuario));
                     copia.crianca = result.data.crianca
@@ -63,7 +64,6 @@ exports.buscaUsuario = async (req, res) => {
         console.log(err)
         // 500 Internal Server Error
         res.status(500).send({ status: 500, message: "Erro ao buscar Usuário" });
-
     }
 }
 

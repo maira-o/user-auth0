@@ -11,7 +11,7 @@ exports.novoEducador = async (data) => {
 exports.buscaReduzidaEducador = async (id) => {
     try {
         return await axios.get(`${process.env.APP_EDUCADOR_URL}/educador/buscaReduzidaEducador/${id}`, {
-            headers: { /* token: localStorage.getItem('token') */ }
+            headers: { token: localStorage.getItem('token') }
         });
     } catch (err) {
         return (err.response)
