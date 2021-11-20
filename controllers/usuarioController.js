@@ -8,7 +8,8 @@ const criancaService    = require('../services/crianca');
 exports.buscaUsuario = async (req, res) => {
     usuarioId = req.params.id
     // userLoggedId = req.user._id
-    userLoggedId = usuarioId // >>> APAGAR <<<
+    // userLoggedId = usuarioId // >>> APAGAR <<<
+    userLoggedId = req.headers.userid
 
     try {
         if(usuarioId != userLoggedId){
@@ -108,7 +109,7 @@ exports.novoUsuario = async (req, res) => {
         let criancaReq = {}
         if (papel === 2) {
             const { dt_nasc, ano_escolar, cidade, uf, telefone, observacoes, nivel_leitura } = req.body
-            userId = '61873f5d6212a24abe8dd210' // >>> APAGAR <<<
+            //userId = '61873f5d6212a24abe8dd210' // >>> APAGAR <<<
             criancaReq = {
                 dt_nasc:        dt_nasc,
                 ano_escolar:    ano_escolar,
@@ -117,7 +118,7 @@ exports.novoUsuario = async (req, res) => {
                 telefone:       telefone,
                 observacoes:    observacoes,
                 nivel_leitura:  nivel_leitura,
-                educadorUsrId:  userId    // id do usuário logado (req.user._id)
+                educadorUsrId:  req.headers.userid // userId    // id do usuário logado (req.user._id)
             }
             let { error } = await validaCrianca(criancaReq);
             if(error){
@@ -169,7 +170,7 @@ exports.novoUsuario = async (req, res) => {
             case 2:
                 console.log("novoUsuario > novaCriança >>>")
                 const data = { usuario: usuario, crianca: criancaReq }
-                result = await criancaService.novaCrianca(data)
+                result = await criancaService.novaCrianca(req, data)
                 if (result.status === 200) {
                     let copia = JSON.parse(JSON.stringify(usuario));
                     copia.crianca = result.data.crianca
