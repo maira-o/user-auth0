@@ -42,7 +42,7 @@ exports.buscaUsuario = async (req, res) => {
                 break;
             case 3:
                 console.log("buscaUsuario > buscaReduzidaApoiador >>>")
-                result = { status: 200, message: 'Sucesso' }
+                result = { status: 200, data: { message: 'Sucesso' } }
                 break;
             default: // 406 Not Acceptable
                 return res.status(406).send({ status: 406, message: "Usuário não classificado" });
@@ -179,15 +179,15 @@ exports.novoUsuario = async (req, res) => {
                 break;
             case 3:
                 console.log("novoUsuario > novoApoiador >>>")
-                result = { status: 500 }
+                result = { status: 200, data: { message: "Apoiador criado com sucesso" } }
                 break;
             default: // 406 Not Acceptable
-                await apagaUsuario(usuario)
+                await rollBackUsuario(usuario)
                 return res.status(406).send({ status: 406, message: "Usuário não classificado" });
         }
         switch (result.status) {
             case 204: // 204 No Content
-                await apagaUsuario(usuario)
+                await rollBackUsuario(usuario)
                 res.status(result.status).send({ status: result.status, message: result.data.message });
                 break;
             case 200: // 200 OK
@@ -196,7 +196,7 @@ exports.novoUsuario = async (req, res) => {
             default:
                 console.log("novoUsuario > 200 > default > result >>>")
                 console.log(result)
-                await apagaUsuario(usuario)
+                await rollBackUsuario(usuario)
                 // 500 Internal Server Error
                 res.status(500).send({ status: 500, message: "Erro ao criar usuário" });
         }
@@ -208,13 +208,59 @@ exports.novoUsuario = async (req, res) => {
     }
 }
 
-const apagaUsuario = async (usuario) => {
+exports.apagaUsuario = async (req, res) => {
+    usuarioId = req.params.id
+    try {
+        const usuario = await Usuario.findOne({ _id: usuarioId }).exec();
+        if(!usuario){
+            // 204 No Content
+            return res.status(204).send({ status: 204, message: 'Usuário não encontrado' });
+        }
+
+        // 200 OK
+        switch (usuario.papel) {
+            case 1:
+                console.log("apagaUsuario > apagaEducador >>>")
+                result = await educadorService.apagaEducador(usuario._id)
+                break;
+            case 2:
+                console.log("apagaUsuario > apagaCriança >>>")
+                result = await criancaService.apagaCrianca(usuario._id)
+                break;
+            case 3:
+                console.log("apagaUsuario > apagaApoiador >>>")
+                result = { status: 200, data: { message: "Sucesso" } }
+                break;
+            default: // 406 Not Acceptable
+                return res.status(406).send({ status: 406, message: "Usuário não classificado" });
+        }
+        switch (result.status) {
+            case 200: // 200 OK
+            case 204: // 204 No Content
+                await usuario.deleteOne()
+                res.status(result.status).send({ status: result.status, message: result.data.message });
+                break;
+            default:
+                console.log("apagaUsuario > 200 > default > result >>>")
+                console.log(result)
+                // 500 Internal Server Error
+                res.status(500).send({ status: 500, message: "Erro ao apagar usuário" });
+        }
+    } catch (err){
+        console.log("apagaUsuario > err >>>")
+        console.log(err)
+        // 500 Internal Server Error
+        res.status(500).send({ status: 500, message: "Erro ao apagar Usuário" });
+    }
+}
+
+const rollBackUsuario = async (usuario) => {
     try {
         // 200 OK
         await usuario.deleteOne()
         return { status: 200, message: 'Usuário apagado' }
     } catch (err){
-        console.log("apagaUsuario > err >>> ")
+        console.log("rollBackUsuario > err >>> ")
         console.log(err)
         // 500 Internal Server Error
         return { status: 500 }

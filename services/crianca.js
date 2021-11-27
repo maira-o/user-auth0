@@ -25,3 +25,16 @@ exports.buscaReduzidaCrianca = async (req, id) => {
         return { status: 500, message: "Erro ao buscaReduzidaCrianca" }
     }
 }
+
+exports.apagaCrianca = async (id) => {
+    try {
+        return await axios.delete(`${process.env.APP_CRIANCA_URL}/crianca/${id}`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+    } catch (err) {
+        console.log("serviceCrianca > apagaCrianca > err >>>")
+        console.log(err)
+        // 500 Internal Server Error
+        return { status: 500, message: "Erro ao apagar criança" }
+    }
+}
