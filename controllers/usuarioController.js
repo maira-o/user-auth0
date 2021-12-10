@@ -124,6 +124,7 @@ exports.novoUsuario = async (req, res) => {
             if(error){
                 console.log("novoUsuario > validaCrianca > error >>>")
                 console.log(error.details[0].message)
+                console.log(criancaReq)
                 // 406 Not Acceptable
                 return res.status(406).send({ status: 406, message: 'O objeto enviado é inválido (dados da criança)' });
             }
